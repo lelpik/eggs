@@ -1,0 +1,72 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2022-08-31T14:34:57+02:00",
+    "name": "CS 1.6 - Complet",
+    "author": "paradadejocuri@gmail.com",
+    "description": "CS 1.6 Steam server egg.\r\nCounter-Strike: 1.6 is a multiplayer first-person shooter video game developed by Valve Corporation.",
+    "features": null,
+    "docker_images": {
+        "quay.io\/pterodactyl\/core:source": "quay.io\/pterodactyl\/core:source"
+    },
+    "file_denylist": [],
+    "startup": ".\/hlds_run -pidfile hlds_{{SERVER_PORT}} -game cstrike -{{SRV_SECURE}} +ip {{SERVER_IP}} +port {{SERVER_PORT}} +sv_lan 0 +maxplayers {{SRV_SLOTS}} +map {{SRV_STARTMAP}} +sys_ticrate 1200 -pingboost {{SRV_PINGBOOST}} -norestart",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Connection to Steam servers successful.\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{\r\n    \"custom\": true,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
+        "stop": "quit"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n# Image to install with is 'ubuntu:18.04'\r\napt -y update\r\napt -y --no-install-recommends install curl lib32gcc1 ca-certificates\r\napt -y --no-install-recommends DEBIAN_FRONTEND=noninteractive install tzdata\r\napt -y --no-install-recommends DEBIAN_FRONTEND=noninteractive install lib32gcc1 libsdl2-2.0-0:i386 screen wget\r\napt -y --no-install-recommends install curl lib32gcc1 ca-certificates\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n## install game using steamcmd\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +force_install_dir \/mnt\/server +login anonymous +app_update \"90 -beta Beta\" validate +quit ## looking at cs 1.6\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +force_install_dir \/mnt\/server +login anonymous +app_update \"90 -beta Beta\" validate +quit ## looking at cs 1.6\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +force_install_dir \/mnt\/server +login anonymous +app_update \"90 -beta Beta\" validate +quit ## looking at cs 1.6\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +force_install_dir \/mnt\/server +login anonymous +app_update \"90 -beta Beta\" validate +quit ## looking at cs 1.6\r\n.\/steamcmd.sh +@sSteamCmdForcePlatformBitness 32 +force_install_dir \/mnt\/server +login anonymous +app_update \"90 -beta Beta\" validate +quit ## looking at cs 1.6\r\n\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so\r\n\r\napt-get update -y\r\napt-get install tar -y\r\napt-get install -y wget\r\napt-get install -y echo\r\nwget \"http:\/\/llgservices.ro\/downloadurl\/rehlds.tar.gz\"\r\ntar -xzvf rehlds.tar.gz -C \/mnt\/server\r\nrm rehlds.tar.gz\r\nwget \"http:\/\/llgservices.ro\/downloadurl\/cstrike5.tar.gz\"\r\ntar -xzvf cstrike5.tar.gz -C \/mnt\/server\/cstrike\r\nrm cstrike5.tar.gz\r\nrm \/mnt\/server\/cstrike\/server.cfg\r\nchown -R root:root \/mnt\r\nchmod a+rx \/mnt\/server\/hlds_linux\r\necho \"\/\/ Config by AfterDarkNetwork.ro\r\nhostname \\\"Hosted By AfterDarkNetwork.ro\\\"\r\n \r\n\/\/ rcon passsword\r\nrcon_password \\\"\\\"\r\n\r\nsv_allowupload 0\r\nsv_allowdownload 1\r\nsv_downloadurl \\\"http:\/\/demon.afterdarknetwork.ro\/volumes\/${P_SERVER_UUID}\/cstrike\\\"\r\nsv_contact contact@afterdarknetwork.ro\r\n\r\nallow_spectators 1\r\nmp_autokick 0\r\nmp_chattime 5\r\nmp_autocrosshair 0\r\nmp_autoteambalance 1\r\nmp_buytime 0.50\r\nmp_consistency 1\r\nmp_c4timer 35\r\nmp_fadetoblack 0\r\nmp_falldamage 1\r\nmp_flashlight 0\r\nmp_forcecamera 0\r\nmp_forcechasecam 0\r\nmp_friendlyfire 0\r\nmp_freezetime 0\r\nmp_fraglimit 0\r\nmp_hostagepenalty 0\r\nmp_limitteams 0\r\nmp_maxrounds 0\r\nmp_playerid 0\r\nmp_roundtime 2\r\nmp_startmoney 800\r\nmp_tkpunish 0\r\nmp_winlimit 0\r\nsv_aim 0\r\nsv_airaccelerate 10\r\nsv_airmove 1\r\nsv_clienttrace 1.0\r\nsv_clipmode 0\r\nsv_cheats 0\r\nsv_gravity 800\r\nsv_lan 0\r\nlog on\r\nsv_logbans 1\r\nsv_logecho 1\r\nsv_logfile 1\r\nsv_log_onefile 0\r\n\r\n\/\/ PERFORMANCE\r\nsys_ticrate 1100\r\nhost_framerate 0\r\nsv_minupdaterate 0\r\nsv_maxupdaterate 101\r\nsv_minrate 0\r\nsv_maxrate 50000\r\nsv_maxspeed 350\r\ndecalfrequency 60\r\npausable 0\r\nedgefriction 2\r\nhost_framerate 0\r\nexec listip.cfg\r\nexec banned.cfg\" > \/mnt\/server\/cstrike\/server.cfg",
+            "container": "ubuntu:18.04",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Secure or Insecure",
+            "description": "",
+            "env_variable": "SRV_SECURE",
+            "default_value": "secure",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Max Players (Slots)",
+            "description": "",
+            "env_variable": "SRV_SLOTS",
+            "default_value": "32",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Startmap",
+            "description": "",
+            "env_variable": "SRV_STARTMAP",
+            "default_value": "de_dust2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Pingboost",
+            "description": "",
+            "env_variable": "SRV_PINGBOOST",
+            "default_value": "2",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}
